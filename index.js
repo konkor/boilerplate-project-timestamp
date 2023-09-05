@@ -20,10 +20,16 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint...
+app.get("/api", function (req, res) {
+  var d = new Date ();
+  res.json ({ unix: d.getTime(), utc: d.toUTCString() });
+});
+
 app.get("/api/:word", function (req, res) {
-  var d = new Date (req.params.word);
+  var d = req.params.word ? new Date (req.params.word) : new Date ();
   if (!d.getTime()) d = new Date (parseInt (req.params.word));
-  res.json({ unix: d.getTime(), utc: d.toUTCString() });
+  if (!d.getTime()) res.json ({error: 'Invalid Date'});
+  else res.json ({ unix: d.getTime(), utc: d.toUTCString() });
 });
 
 
